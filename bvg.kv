@@ -1,0 +1,151 @@
+#:kivy 1.0
+
+<MyLabel@Label>:
+    font_size: '70sp'
+    text_size: self.size
+    color: 1,1,1,1
+    canvas.before:
+        Color:
+            rgb: 0.07, 0.54, 0.66 # your color here
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+<BVG>:
+    canvas:
+        Rectangle:
+            pos: 0, 0
+            size: self.width, root.height * 0.08
+        Rectangle:
+            pos: 0, root.height-root.height * 0.08
+            size: self.width, root.height * 0.08
+
+    GridLayout:
+        # pos: (0, root.height-100)
+        cols: 1
+        rows: 11
+        col_default_width: root.width * 0.2
+        col_force_default: True
+        row_default_height: 90
+        row_force_default: True
+        Label:
+            text: 'Linie'
+            color: 0,0,0,1
+            font_size: '70sp'
+            text_size: self.size
+        MyLabel:
+            text: str(root.line[0])
+        MyLabel:
+            text: str(root.line[1])
+        MyLabel:
+            text: str(root.line[2])
+        MyLabel:
+            text: str(root.line[3])
+        MyLabel:
+            text: str(root.line[4])
+        MyLabel:
+            text: str(root.line[5])
+        MyLabel:
+            text: str(root.line[6])
+        MyLabel:
+            text: str(root.line[7])
+        MyLabel:
+            text: str(root.line[8])
+        MyLabel:
+            text: str(root.line[9])
+
+    GridLayout:
+        pos: (self.width * 0.2, 0)
+        cols: 1
+        rows: 11
+        col_default_width: root.width * 0.7
+        col_force_default: True
+        row_default_height: 90
+        row_force_default: True
+        Label:
+            text: 'Richtung'
+            color: 0,0,0,1
+            font_size: '70sp'
+            text_size: self.size
+        MyLabel:
+            text: str(root.destination[0])
+        MyLabel:
+            text: str(root.destination[1])
+        MyLabel:
+            text: str(root.destination[2])
+        MyLabel:
+            text: str(root.destination[3])
+        MyLabel:
+            text: str(root.destination[4])
+        MyLabel:
+            text: str(root.destination[5])
+        MyLabel:
+            text: str(root.destination[6])
+        MyLabel:
+            text: str(root.destination[7])
+        MyLabel:
+            text: str(root.destination[8])
+        MyLabel:
+            text: str(root.destination[9])
+
+    GridLayout:
+        pos: (self.width * 0.9, 0)
+        cols: 1
+        rows: 11
+        col_default_width: root.width * 0.1
+        col_force_default: True
+        row_default_height: 90
+        row_force_default: True
+        Label:
+            text: 'Zeit'
+            color: 0,0,0,1
+            font_size: '70sp'
+            text_size: self.size
+            halign: 'right'
+        MyLabel:
+            text: str(root.remaining[0])
+            halign: 'right'
+        MyLabel:
+            text: str(root.remaining[1])
+            halign: 'right'
+        MyLabel:
+            text: str(root.remaining[2])
+            halign: 'right'
+        MyLabel:
+            text: str(root.remaining[3])
+            halign: 'right'
+        MyLabel:
+            text: str(root.remaining[4])
+            halign: 'right'
+        MyLabel:
+            text: str(root.remaining[5])
+            halign: 'right'
+        MyLabel:
+            text: str(root.remaining[6])
+            halign: 'right'
+        MyLabel:
+            text: str(root.remaining[7])
+            halign: 'right'
+        MyLabel:
+            text: str(root.remaining[8])
+            halign: 'right'
+        MyLabel:
+            text: str(root.remaining[9])
+            halign: 'right'
+
+    GridLayout:
+        pos: (0, 0)
+        cols: 2
+        rows: 1
+
+        Label:
+            font_size: '70sp'
+            text: 'Spandauer Damm 111'
+            text_size: self.size
+            color: 0,0,0,1
+        Label:
+            font_size: '70sp'
+            text: str(root.time)
+            text_size: self.size
+            color: 0,0,0,1
+            halign: 'right'
