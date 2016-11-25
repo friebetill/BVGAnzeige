@@ -77,7 +77,7 @@ class BVGApp(App):
         return bvg
 
 if __name__ == '__main__':
-    # Window.size = (1280, 1024)
-    Window.size = (1920, 1080)
+    Window.size = (1280, 1024)
+    # Window.size = (1920, 1080)
     Window.fullscreen = True
     BVGApp().run()
