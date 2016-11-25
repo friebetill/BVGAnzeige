@@ -2,5 +2,7 @@
 BVGAnzeige fuer die WG
 
 ## Installation
-sudo pip3 install Cython
-sudo pip3 install kivy
+<ul>
+    <li>sudo pip3 install Cython</li>
+    <li>sudo pip3 install kivy</li>
+</ul>
