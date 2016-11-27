@@ -11,6 +11,8 @@ import json
 
 import re
 
+from executor import execute
+
 kivy.require('1.0.5')
 
 def updateList(listLine, listDestination, listRemaining):
@@ -50,15 +52,23 @@ def getShortestTenEntries(parsed):
 
 class BVG(FloatLayout):
     def update(self, dt):
-        self.time = str(datetime.now().strftime('%H:%M:%S'))
-        self.counter += 1
-        if(self.counter >= 10):
-            self.counter = 0
-            updateList(self.listLine, self.listDestination, self.listRemaining)
+        if(self.sleepmode == 0):
+            self.time = str(datetime.now().strftime('%H:%M:%S'))
+            self.counter += 1
+            if(self.counter >= 10):
+                self.counter = 0
+                updateList(self.listLine, self.listDestination, self.listRemaining)
+            if(datetime.now().hour <= 6 or datetime.now().hour >= 21):
+                self.sleepmode = 0
+                # execute('xset', 'dpms', 'force', 'off')
 
+        else:
+            if(not(datetime.now().hour >= 21 or datetime.now().hour <= 6)):
+                self.sleepmode = 0
+
+    sleepmode = 0
     time = StringProperty()
     counter = 0
-
     listLine = ['0'] * 10
     listDestination = ['0'] * 10
     listRemaining = ['0'] * 10
@@ -73,11 +83,11 @@ class BVGApp(App):
 
     def build(self):
         bvg = BVG()
-        Clock.schedule_interval(bvg.update, 1.0)
+        Clock.schedule_interval(bvg.update, 1)
         return bvg
 
 if __name__ == '__main__':
-    Window.size = (1280, 1024)
-    # Window.size = (1920, 1080)
+    # Window.size = (1280, 1024)
+    Window.size = (1920, 1080)
     Window.fullscreen = True
     BVGApp().run()
