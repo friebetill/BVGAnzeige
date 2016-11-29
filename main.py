@@ -5,6 +5,7 @@ from kivy.app import App
 from kivy.properties import StringProperty, ListProperty
 from datetime import datetime
 from kivy.core.window import Window
+from random import randint
 
 from bvggrabber.api.actualdeparture import ActualDepartureQueryApi
 import json
@@ -15,24 +16,6 @@ from executor import execute
 
 kivy.require('1.0.5')
 
-def updateList(listLine, listDestination, listRemaining):
-    busKoeniginResult = ActualDepartureQueryApi('S Westend (Berlin)').call()
-    sWestendResult = ActualDepartureQueryApi('Königin-Elisabeth-Str/Spandauer Damm (Berlin)').call()
-    sWestendResult.merge(busKoeniginResult)
-    parsed = json.loads(sWestendResult.to_json)
-
-    shortestTenEntries = getShortestTenEntries(parsed)
-    for i in range(len(listLine)):
-        linie = shortestTenEntries[i]['line']
-        linie = re.sub(r'Bus  ', r'', linie)
-        linie = re.sub(r'\n[\s\S]*', r'', linie)
-        listLine[i] = linie
-        listDestination[i] = shortestTenEntries[i]['end']
-        time = int(shortestTenEntries[i]['remaining']/60)
-        if time <= 0:
-            listRemaining[i] = 'Jetzt'
-        else:
-            listRemaining[i] = str(time) + 'm'
 
 def getShortestTenEntries(parsed):
     counterWestend = 0
@@ -42,29 +25,47 @@ def getShortestTenEntries(parsed):
         if parsed[0][1][counterWestend]['remaining'] < parsed[1][1][counterKoenigin]['remaining']:
             if parsed[0][1][counterWestend]['line'] != 'Bus  M45':
                 listOfEntrys.append(parsed[0][1][counterWestend])
-                counterWestend += 1
-            else:
-                counterWestend += 1
+            counterWestend += 1
         else:
             listOfEntrys.append(parsed[1][1][counterKoenigin])
             counterKoenigin += 1
     return listOfEntrys
 
 class BVG(FloatLayout):
-    def update(self, dt):
-        if(self.sleepmode == 0):
-            self.time = str(datetime.now().strftime('%H:%M:%S'))
-            self.counter += 1
-            if(self.counter >= 10):
-                self.counter = 0
-                updateList(self.listLine, self.listDestination, self.listRemaining)
-            if(datetime.now().hour <= 6 or datetime.now().hour >= 21):
-                self.sleepmode = 0
-                # execute('xset', 'dpms', 'force', 'off')
+    def updateList(self):
+        busKoeniginResult = ActualDepartureQueryApi('S Westend (Berlin)').call()
+        sWestendResult = ActualDepartureQueryApi('Königin-Elisabeth-Str/Spandauer Damm (Berlin)').call()
+        sWestendResult.merge(busKoeniginResult)
+        parsed = json.loads(sWestendResult.to_json)
 
-        else:
+        shortestTenEntries = getShortestTenEntries(parsed)
+        for i in range(len(self.destination)):
+            linie = shortestTenEntries[i]['line']
+            linie = re.sub(r'Bus  ', r'', linie)
+            linie = re.sub(r'\n[\s\S]*', r'', linie)
+            self.line[i] = linie
+            self.destination[i] = shortestTenEntries[i]['end']
+            time = int(shortestTenEntries[i]['remaining']/60)
+            if time <= 0:
+                self.remaining[i] = 'Jetzt'
+            else:
+                self.remaining[i] = str(time) + 'm'
+
+    def update(self, dt):
+        if(self.sleepmode == 1):
             if(not(datetime.now().hour >= 21 or datetime.now().hour <= 6)):
                 self.sleepmode = 0
+            return
+        if(datetime.now().hour <= 6 or datetime.now().hour >= 21):
+            self.sleepmode = 0
+            # execute('xset', 'dpms', 'force', 'off')
+            # return
+
+        self.time = str(datetime.now().strftime('%H:%M:%S'))
+        self.counter += 1
+        if(self.counter >= 10):
+            self.counter = 0
+            self.updateList()
 
     sleepmode = 0
     time = StringProperty()
@@ -75,8 +76,6 @@ class BVG(FloatLayout):
     line = ListProperty(listLine)
     destination = ListProperty(listDestination)
     remaining = ListProperty(listRemaining)
-
-    updateList(listLine, listDestination, listRemaining)
 
 
 class BVGApp(App):
