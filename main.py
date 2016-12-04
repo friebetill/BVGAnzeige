@@ -14,6 +14,8 @@ import re
 
 from executor import execute
 
+#import threading
+
 kivy.require('1.0.5')
 
 
@@ -53,23 +55,26 @@ class BVG(FloatLayout):
 
     def update(self, dt):
         if(self.sleepmode == 1):
-            if(not(datetime.now().hour >= 21 or datetime.now().hour <= 6)):
+            if(not(datetime.now().hour <= 6 or datetime.now().hour >= 21)):
                 self.sleepmode = 0
             return
         if(datetime.now().hour <= 6 or datetime.now().hour >= 21):
-            self.sleepmode = 0
-            # execute('xset', 'dpms', 'force', 'off')
-            # return
+            self.sleepmode = 1
+            execute('xset', 'dpms', 'force', 'off')
+            return
 
         self.time = str(datetime.now().strftime('%H:%M:%S'))
         self.counter += 1
         if(self.counter >= 10):
             self.counter = 0
             self.updateList()
+            # t = threading.Thread(target=self.updateList())
+            # t.daemon = True
+            # t.start()
 
     sleepmode = 0
     time = StringProperty()
-    counter = 0
+    counter = 10
     listLine = ['0'] * 8
     listDestination = ['0'] * 8
     listRemaining = ['0'] * 8
@@ -86,7 +91,7 @@ class BVGApp(App):
         return bvg
 
 if __name__ == '__main__':
-    # Window.size = (1280, 1024)
+    Window.size = (1280, 1024)
     # Window.size = (1920, 1080)
     # Window.fullscreen = True
     BVGApp().run()
