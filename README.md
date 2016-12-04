@@ -1,30 +1,30 @@
 # BVGAnzeige
-Kleines Projekt um in der WG die kommende Busse und S-Bahn zu sehen
+Small project to visualize when buses and s-bahn arrive in Berlin on Raspberry Pi.
 
 <img src="images/example1.jpg" alt="Example1" style="width: 750;"/>
 
 ## Installation
-1. Installiere Kivy, siehe https://kivy.org/docs/installation/installation.html
-Falls du einen Raspberry PI benutzt, schau dir KivyPie an, da ist Kivy schon vorkonfiguriert.
-2. Installiere bvg-grabber
+1. Install Kivy, look at https://kivy.org/docs/installation/installation.html
+If you use raspberry pi, I recommend to use KivyPie.
+2. Install bvg-grabber
 ~~~bash
 sudo pip3 install bvg-grabber
 ~~~
-3. Installiere Executor, damit der Bildschirm in der Nacht ausgeht(funktioniert zurzeit nur auf Linux)
+3. Install Executor, that the screen can be turned off in the night.
 ~~~bash
 sudo pip3 install executor
 ~~~
-4. Bereinige Fehler in bvg-grabber
-Suche die Dateien "actualdeparture.py" und "scheduleddeparture.py"
+4. Remove error in bvg-grabber
+Search for "actualdeparture.py" and "scheduleddeparture.py"
 ~~~bash
 sudo find / -name "scheduleddeparture.py"
 sudo find / -name "actualdeparture.py"
 ~~~
-Veraendere die Zeilen in beiden Datein:
+Change the lines of both files:
 ~~~python
 soup = BeautifulSoup(response.text)
 ~~~
-zu
+to
 ~~~python
 soup = BeautifulSoup(response.text, "lxml")
 ~~~
