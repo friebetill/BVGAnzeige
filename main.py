@@ -70,9 +70,9 @@ class BVG(FloatLayout):
     sleepmode = 0
     time = StringProperty()
     counter = 0
-    listLine = ['0'] * 10
-    listDestination = ['0'] * 10
-    listRemaining = ['0'] * 10
+    listLine = ['0'] * 8
+    listDestination = ['0'] * 8
+    listRemaining = ['0'] * 8
     line = ListProperty(listLine)
     destination = ListProperty(listDestination)
     remaining = ListProperty(listRemaining)
@@ -87,6 +87,6 @@ class BVGApp(App):
 
 if __name__ == '__main__':
     # Window.size = (1280, 1024)
-    Window.size = (1920, 1080)
-    Window.fullscreen = True
+    # Window.size = (1920, 1080)
+    # Window.fullscreen = True
     BVGApp().run()
