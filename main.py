@@ -1,11 +1,11 @@
 import kivy
 from kivy.clock import Clock
+from kivy.lang import Builder
 from kivy.uix.floatlayout import FloatLayout
 from kivy.app import App
 from kivy.properties import StringProperty, ListProperty
 from datetime import datetime
 from kivy.core.window import Window
-from random import randint
 
 from bvggrabber.api.actualdeparture import ActualDepartureQueryApi
 import json
@@ -14,10 +14,11 @@ import re
 
 from executor import execute
 
-#import threading
+# import threading
 
 kivy.require('1.0.5')
 
+Builder.load_file('bvg1280.kv')
 
 def getShortestTenEntries(parsed):
     counterWestend = 0
@@ -32,6 +33,7 @@ def getShortestTenEntries(parsed):
             listOfEntrys.append(parsed[1][1][counterKoenigin])
             counterKoenigin += 1
     return listOfEntrys
+
 
 class BVG(FloatLayout):
     def updateList(self):
