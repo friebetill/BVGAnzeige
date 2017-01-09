@@ -14,11 +14,13 @@ import re
 
 from executor import execute
 
-# import threading
+import threading
 
 kivy.require('1.0.5')
 
+# Change this line to update configuration
 Builder.load_file('bvg1280.kv')
+
 
 def getShortestTenEntries(parsed):
     counterWestend = 0
@@ -57,10 +59,10 @@ class BVG(FloatLayout):
 
     def update(self, dt):
         if(self.sleepmode == 1):
-            if(not(datetime.now().hour <= 6 or datetime.now().hour >= 21)):
+            if(not(datetime.now().hour <= 10 or datetime.now().hour >= 24)):
                 self.sleepmode = 0
             return
-        if(datetime.now().hour <= 6 or datetime.now().hour >= 21):
+        if(datetime.now().hour <= 10 or datetime.now().hour >= 24):
             self.sleepmode = 1
             execute('xset', 'dpms', 'force', 'off')
             return
@@ -69,10 +71,9 @@ class BVG(FloatLayout):
         self.counter += 1
         if(self.counter >= 10):
             self.counter = 0
-            self.updateList()
-            # t = threading.Thread(target=self.updateList())
-            # t.daemon = True
-            # t.start()
+            # self.updateList()
+            t = threading.Thread(target=self.updateList())
+            t.start()
 
     sleepmode = 0
     time = StringProperty()
@@ -86,7 +87,6 @@ class BVG(FloatLayout):
 
 
 class BVGApp(App):
-
     def build(self):
         bvg = BVG()
         Clock.schedule_interval(bvg.update, 1)
